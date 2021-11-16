@@ -12,9 +12,10 @@ RUN sed -i "s@deb.debian.org@mirrors.aliyun.com@g" /etc/apt/sources.list \
 COPY requirements.txt /tmp/requirements.txt
 
 RUN pip3 install --default-timeout=1000 --no-cache-dir -r /tmp/requirements.txt
+COPY entrypoint.sh /entrypoint.sh
 
 RUN mkdir -p /app
-
 WORKDIR /app
 
-CMD [ "scrapy", "shell", "--nolog" ]
+ENTRYPOINT ["/entrypoint.sh"]
+CMD [ "scrapy" ]
