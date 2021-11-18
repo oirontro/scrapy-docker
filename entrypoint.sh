@@ -9,14 +9,34 @@ if (echo $scrapy_commands | grep -qw "$1"); then
     set -- scrapy $@
 fi
 
-# Add local user
-# Either use the LOCAL_USER_ID if passed in at runtime or
-# fallback
 
-USER_ID=${LOCAL_USER_ID:-1000}
+if [ "$LOCAL_USER_ID" = "" ]; then
+    # LOCAL_USER_ID not specified,
+    # fix uid:gid of dev according to current directory
 
-echo "Starting with UID : $USER_ID"
-useradd --shell /bin/bash -u $USER_ID -o -c "" -m user
-export HOME=/home/user
+    WD=$PWD
+    uid=$(stat -c '%u' "$WD")
+    gid=$(stat -c '%g' "$WD")
 
-exec gosu user "$@"
+    echo "dev ---> UID = $uid / GID = $gid"
+
+    export USER=dev
+    export HOME=/home/dev
+
+    usermod -u $uid dev 2> /dev/null && {
+      groupmod -g $gid dev 2> /dev/null || usermod -a -G $gid dev
+    }
+    exec gosu dev "$@"
+else
+    # Add local user
+    # Either use the LOCAL_USER_ID if passed in at runtime or
+    # fallback
+
+    USER_ID=${LOCAL_USER_ID:-1000}
+
+    echo "creating user with specified UID : $USER_ID"
+    useradd --shell /bin/bash -u $USER_ID -o -c "" -m user
+    export HOME=/home/user
+    exec gosu user "$@"
+
+fi
