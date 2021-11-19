@@ -2,13 +2,15 @@
 WD=/app
 DEVD=/dev_packages
 
+mkdir -p $DEVD
+
 echo install additional packages if `pwd`/requirements.txt exists
 
 if [ -e requirements.txt ]
 then
     echo `pwd`/requirements.txt found, installing
     pip install -r requirements.txt
-    touch $WD/req_package_"${PWD##*/}"_installed
+    touch $DEVD/req_package_"${PWD##*/}"_installed
 else
     echo no `pwd`/requirements.txt, no additional installation
 fi
@@ -26,11 +28,11 @@ then
         ls -al "$dir"
         pip install -e "$dir"
         echo "package " "$dir" " installed in dev mode."
-        touch $WD/dev_package_"$dir"_installed
+        touch $DEVD/dev_package_"$dir"_installed
     done
 else
     echo "no package needs to be installed in dev mode."
-    touch $WD/no_dev_package_installed
+    touch $DEVD/no_dev_package_installed
 fi
 
 cd $WD
