@@ -19,8 +19,10 @@ RUN pip3 install --default-timeout=1000 --no-cache-dir -r /tmp/requirements.txt
 # Add local user 'dev'
 RUN groupadd -r dev --gid=1000 && useradd -r -g dev --uid=1000 dev
 # Grant him sudo privileges
-RUN echo "dev ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/dev && \
-    chmod 0440 /etc/sudoers.d/dev
+RUN echo "dev ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/dev  \
+    && chmod 0440 /etc/sudoers.d/dev \
+    && echo "user ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/user \
+    && chmod 0440 /etc/sudoers.d/user
 
 COPY entrypoint.sh /entrypoint.sh
 COPY dev_package.sh /dev_package.sh

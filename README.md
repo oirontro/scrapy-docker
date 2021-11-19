@@ -12,7 +12,7 @@
    + new user `user` would be created according to environment variable
      `LOCAL_USER_ID`, for example, if `docker run` with `-e LOCAL_USER_ID=$(id
      -u)`.
-
+   + `sudo` without password
 
 Usages:
 
