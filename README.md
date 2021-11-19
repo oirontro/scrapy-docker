@@ -1,9 +1,11 @@
 # scrapy in docker container #
 
 1. apt and pip install from mirrors in China,
-2. local Python package installed in develop mode if mounted under
-   `/dev_packages`, by user `root`,
-3. non-root user supported,
+2. Python packages installed by user `root`, if `requirements.txt` under default
+   working directory,
+3. local Python packages installed in develop mode by user `root`, if mounted
+   under `/dev_packages`,
+4. non-root user supported,
    + non-root user `dev` would have the same `uid:gid` as the directory mounted
      to `/app`, if environment variable `LOCAL_USER_ID` not specified,
      otherwise,
