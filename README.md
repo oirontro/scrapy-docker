@@ -13,6 +13,7 @@
      `LOCAL_USER_ID`, for example, if `docker run` with `-e LOCAL_USER_ID=$(id
      -u)`.
    + `sudo` without password
+5. directory `/data` owned by current user.
 
 Usages:
 
