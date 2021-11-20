@@ -27,7 +27,9 @@ RUN echo "dev ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/dev  \
 COPY entrypoint.sh /entrypoint.sh
 COPY dev_package.sh /dev_package.sh
 
-RUN mkdir -p /app
+RUN mkdir -p /app \
+    && mkdir -p /data \
+    && chown -R dev:dev /data
 WORKDIR /app
 
 # Repass root

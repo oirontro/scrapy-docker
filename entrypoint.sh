@@ -20,13 +20,11 @@ if [ "$LOCAL_USER_ID" = "" ]; then
 
     echo "dev ---> UID = $uid / GID = $gid"
 
-    export USER=dev
-    export HOME=/home/dev
+    USER=dev
 
     usermod -u $uid dev 2> /dev/null && {
       groupmod -g $gid dev 2> /dev/null || usermod -a -G $gid dev
     }
-    exec gosu dev "$@"
 else
     # Add local user
     # Either use the LOCAL_USER_ID if passed in at runtime or
@@ -36,7 +34,12 @@ else
 
     echo "creating user with specified UID : $USER_ID"
     useradd --shell /bin/bash -u $USER_ID -o -c "" -m user
-    export HOME=/home/user
-    exec gosu user "$@"
-
+    USER=user
 fi
+
+chown -R $USER /data
+
+export USER=$USER
+export HOME=/home/$USER
+
+exec gosu $USER "$@"
